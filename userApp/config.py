@@ -11,6 +11,10 @@ class Settings(BaseSettings):
     host : str
     port : str
 
+    secret_key : str
+    algorithm : str
+    access_token_expire_minutes : str
+
     class Config:
         env_file = ".env"
 

@@ -23,10 +23,12 @@ def read_users(skip: int = 0, limit: int = 100):
 
 
 @router.get(
-    "/{user_id}", response_model=schemas.User, dependencies=[Depends(dependencies.get_db)]
+    "/{user_id}", response_model=schemas.User, dependencies=[Depends(dependencies.get_db), Depends(crud.get_current_active_user)]
 )
 def read_user(user_id: int):
     db_user = crud.get_user(user_id=user_id)
+    print('ok')
+    print(db_user.token)
     if db_user is None:
         raise HTTPException(status_code=404, detail="User not found")
     return db_user

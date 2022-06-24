@@ -1,3 +1,4 @@
+from datetime import datetime
 from typing import Any, List, Union
 
 import peewee
@@ -12,6 +13,12 @@ class PeeweeGetterDict(GetterDict):
             return list(res)
         return res
 
+class Token(BaseModel):
+    access_token: str
+    token_type: str
+
+class TokenData(BaseModel):
+    username: Union[str , None] = None
 
 class ItemBase(BaseModel):
     title: str
@@ -34,16 +41,27 @@ class Item(ItemBase):
 class UserBase(BaseModel):
     email: str
 
-
 class UserCreate(UserBase):
     password: str
 
+class UserToken(BaseModel):
+    id: int
+    owner_id: int
+    token: str
+    created_at : datetime
+    class Config:
+        orm_mode = True
+        getter_dict = PeeweeGetterDict
 
 class User(UserBase):
     id: int
+    username: str
     is_active: bool
     items: List[Item] = []
 
     class Config:
         orm_mode = True
         getter_dict = PeeweeGetterDict
+
+class UserInDB(User):
+    hashed_password: str
